@@ -12,10 +12,50 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://goembersystems.com";
+
+const title = "Ember Systems | AI Automation, Custom Software & Business Websites";
+const description =
+  "Ember Systems builds AI automation, custom software, business websites, internal dashboards, and workflow systems that help contractors and growing businesses save time and grow faster.";
+
 export const metadata: Metadata = {
-  title: "Ember Systems | Build Smarter. Automate More. Grow Faster.",
-  description:
-    "Custom software, AI automation, dashboards, and modern websites built to help businesses save time, reduce repetitive work, and grow faster.",
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  keywords: [
+    "AI automation",
+    "business automation",
+    "contractor software",
+    "dashboards",
+    "business websites",
+    "custom software",
+    "workflow automation",
+    "lead capture systems",
+    "internal dashboards",
+    "AI chatbots",
+    "small business software",
+    "Ember Systems",
+  ],
+  authors: [{ name: "Ember Systems", url: siteUrl }],
+  creator: "Ember Systems",
+  publisher: "Ember Systems",
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteUrl,
+    siteName: "Ember Systems",
+    title,
+    description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default function RootLayout({
