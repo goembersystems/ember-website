@@ -16,6 +16,28 @@ export default function ContactForm() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const name = String(data.get("name") ?? "");
+    const email = String(data.get("email") ?? "");
+    const projectType = String(data.get("project-type") ?? "");
+    const message = String(data.get("message") ?? "");
+
+    const subject = "New Ember Systems Project Inquiry";
+    const body = [
+      "New project inquiry from the Ember Systems website:",
+      "",
+      `Name: ${name}`,
+      `Email: ${email}`,
+      `Project Type: ${projectType}`,
+      "",
+      "Message:",
+      message,
+    ].join("\n");
+
+    const mailto = `mailto:thatonehondarider@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
     setSubmitted(true);
   }
 
@@ -25,10 +47,10 @@ export default function ContactForm() {
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-orange-400/20">
           <span className="text-xl text-orange-300">✓</span>
         </div>
-        <h3 className="text-lg font-semibold text-white">Message received</h3>
+        <h3 className="text-lg font-semibold text-white">Email draft ready</h3>
         <p className="mt-2 text-sm leading-6 text-zinc-400">
-          Thanks for reaching out. We&apos;ll review your project details and get
-          back to you shortly.
+          Your email app should open with your inquiry prefilled. Send the email
+          to complete your submission and we&apos;ll get back to you shortly.
         </p>
       </div>
     );

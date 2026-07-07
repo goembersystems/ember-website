@@ -121,15 +121,9 @@ export default function Home() {
             </span>
           </a>
 
-          <nav className="hidden items-center gap-7 text-sm text-zinc-400 lg:flex">
-            <a className="transition hover:text-white" href="#solutions">
-              Solutions
-            </a>
-            <a className="transition hover:text-white" href="#who-we-help">
-              Who We Help
-            </a>
-            <a className="transition hover:text-white" href="#portfolio">
-              Portfolio
+          <nav className="hidden items-center gap-7 text-sm text-zinc-400 md:flex">
+            <a className="transition hover:text-white" href="#services">
+              Services
             </a>
             <a className="transition hover:text-white" href="#process">
               Process
@@ -178,15 +172,15 @@ export default function Home() {
               </a>
               <a
                 className="rounded-full border border-white/12 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-white backdrop-blur transition hover:-translate-y-0.5 hover:border-orange-300/30 hover:bg-orange-400/10"
-                href="#solutions"
+                href="#portfolio"
               >
-                View Solutions
+                See What We Build
               </a>
             </div>
           </div>
         </section>
 
-        <section id="solutions" className="scroll-mt-24 py-20 sm:py-28">
+        <section id="services" className="scroll-mt-24 py-20 sm:py-28">
           <div className="mb-12 max-w-2xl">
             <p className="mb-3 text-sm font-medium uppercase tracking-[0.25em] text-orange-300">
               Featured Solutions
@@ -314,9 +308,12 @@ export default function Home() {
                   <p className="mt-3 flex-1 text-sm leading-6 text-zinc-400">
                     {project.description}
                   </p>
-                  <span className="mt-6 text-sm font-medium text-orange-300/80 transition group-hover:text-orange-300">
-                    Demo project →
-                  </span>
+                  <a
+                    className="mt-6 inline-flex text-sm font-medium text-orange-300/80 transition hover:text-orange-300"
+                    href="#contact"
+                  >
+                    Ask about this →
+                  </a>
                 </div>
               </article>
             ))}
@@ -333,9 +330,8 @@ export default function Home() {
                 Ready to build smarter?
               </h2>
               <p className="mt-4 max-w-md text-base leading-7 text-zinc-400">
-                Tell us what you&apos;re trying to build. Whether you need AI
-                automation, a new website, or a custom dashboard, we&apos;ll help
-                you map the right next step.
+                Tell us what you&apos;re building. We&apos;ll help you figure out
+                the fastest path from idea to launch.
               </p>
 
               <div className="mt-8 space-y-3 text-sm text-zinc-500">
