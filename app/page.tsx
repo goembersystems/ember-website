@@ -1,29 +1,85 @@
+import ContactForm from "./components/ContactForm";
+
 export default function Home() {
-  const offerings = [
+  const solutions = [
     {
-      title: "AI Automation",
+      title: "AI Chatbots",
       description:
-        "Intelligent workflows that handle repetitive tasks so your team can focus on high-value work.",
+        "Smart assistants that answer questions, qualify leads, and support customers around the clock.",
     },
     {
-      title: "Custom Software",
+      title: "Business Automation",
       description:
-        "Purpose-built tools tailored to your operations, customers, and growth goals.",
+        "Automated workflows that eliminate repetitive tasks and keep your operations running smoothly.",
     },
     {
-      title: "Business Websites",
+      title: "Custom Websites",
       description:
-        "Fast, modern sites designed to convert visitors and represent your brand with confidence.",
+        "Fast, modern websites built to convert visitors and position your business as a premium brand.",
     },
     {
       title: "Internal Dashboards",
       description:
-        "Real-time visibility into the metrics and workflows that drive your business forward.",
+        "Centralized dashboards that give your team real-time visibility into the metrics that matter.",
     },
     {
-      title: "Workflow Automation",
+      title: "Lead Capture Systems",
       description:
-        "Connected systems that eliminate manual handoffs and keep operations running smoothly.",
+        "Forms, funnels, and follow-up flows designed to turn traffic into qualified opportunities.",
+    },
+    {
+      title: "Custom Software",
+      description:
+        "Purpose-built tools tailored to your workflows, customers, and long-term growth goals.",
+    },
+  ];
+
+  const audiences = [
+    {
+      title: "Contractors",
+      description:
+        "Streamline estimates, follow-ups, and job tracking with tools built for the field.",
+    },
+    {
+      title: "Small businesses",
+      description:
+        "Replace spreadsheets and manual work with systems that save hours every week.",
+    },
+    {
+      title: "Local service companies",
+      description:
+        "Capture more leads, respond faster, and deliver a polished client experience.",
+    },
+    {
+      title: "Startups",
+      description:
+        "Launch faster with lean, scalable software that grows alongside your business.",
+    },
+    {
+      title: "Teams drowning in repetitive work",
+      description:
+        "Automate the busywork so your team can focus on clients, sales, and growth.",
+    },
+  ];
+
+  const projects = [
+    {
+      title: "Contractor Lead Dashboard",
+      category: "Dashboard",
+      description:
+        "A centralized hub for tracking inbound leads, follow-up status, and conversion metrics.",
+    },
+    {
+      title: "AI Estimate Assistant",
+      category: "AI Automation",
+      description:
+        "An intelligent tool that helps contractors generate faster, more consistent project estimates.",
+    },
+    {
+      title: "Website Launch System",
+      category: "Website",
+      description:
+        "A repeatable launch framework for building and deploying high-converting business websites.",
     },
   ];
 
@@ -65,9 +121,15 @@ export default function Home() {
             </span>
           </a>
 
-          <nav className="hidden items-center gap-8 text-sm text-zinc-400 md:flex">
-            <a className="transition hover:text-white" href="#services">
-              Services
+          <nav className="hidden items-center gap-7 text-sm text-zinc-400 lg:flex">
+            <a className="transition hover:text-white" href="#solutions">
+              Solutions
+            </a>
+            <a className="transition hover:text-white" href="#who-we-help">
+              Who We Help
+            </a>
+            <a className="transition hover:text-white" href="#portfolio">
+              Portfolio
             </a>
             <a className="transition hover:text-white" href="#process">
               Process
@@ -91,7 +153,7 @@ export default function Home() {
           <div className="mx-auto max-w-4xl animate-fade-up">
             <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-orange-300/20 bg-orange-400/10 px-4 py-2 text-sm text-orange-100 backdrop-blur">
               <span className="h-2 w-2 rounded-full bg-orange-400 shadow-[0_0_14px_rgba(251,146,60,0.9)]" />
-              Premium software for modern businesses
+              AI automation & custom software for growing businesses
             </div>
 
             <h1 className="text-balance bg-gradient-to-b from-white via-zinc-100 to-zinc-500 bg-clip-text text-4xl font-semibold tracking-[-0.05em] text-transparent sm:text-6xl lg:text-7xl">
@@ -116,28 +178,32 @@ export default function Home() {
               </a>
               <a
                 className="rounded-full border border-white/12 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-white backdrop-blur transition hover:-translate-y-0.5 hover:border-orange-300/30 hover:bg-orange-400/10"
-                href="#services"
+                href="#solutions"
               >
-                See What We Build
+                View Solutions
               </a>
             </div>
           </div>
         </section>
 
-        <section id="services" className="scroll-mt-24 py-20 sm:py-28">
+        <section id="solutions" className="scroll-mt-24 py-20 sm:py-28">
           <div className="mb-12 max-w-2xl">
             <p className="mb-3 text-sm font-medium uppercase tracking-[0.25em] text-orange-300">
-              What We Build
+              Featured Solutions
             </p>
             <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
-              Systems that save time and drive growth.
+              Software that sells, automates, and scales.
             </h2>
+            <p className="mt-4 text-base leading-7 text-zinc-400">
+              From AI chatbots to custom dashboards, we build the systems that
+              help businesses win more work and waste less time.
+            </p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {offerings.map((item, index) => (
+            {solutions.map((item, index) => (
               <article
-                className="group flex flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-orange-300/25 hover:bg-orange-400/[0.06] lg:last:col-span-1"
+                className="group flex flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-orange-300/25 hover:bg-orange-400/[0.06]"
                 key={item.title}
               >
                 <span className="mb-6 text-xs font-medium tracking-widest text-orange-300/70">
@@ -150,6 +216,35 @@ export default function Home() {
                 <div className="mt-6 h-px w-10 bg-gradient-to-r from-orange-400/80 to-transparent transition group-hover:w-16" />
               </article>
             ))}
+          </div>
+        </section>
+
+        <section id="who-we-help" className="scroll-mt-24 py-20 sm:py-28">
+          <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 backdrop-blur sm:p-12">
+            <div className="mb-12 max-w-2xl">
+              <p className="mb-3 text-sm font-medium uppercase tracking-[0.25em] text-orange-300">
+                Who We Help
+              </p>
+              <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                Built for teams that need leverage, not more busywork.
+              </h2>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {audiences.map((item) => (
+                <article
+                  className="rounded-2xl border border-white/8 bg-black/40 p-6"
+                  key={item.title}
+                >
+                  <h3 className="text-base font-semibold text-white">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-6 text-zinc-400">
+                    {item.description}
+                  </p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -187,33 +282,109 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="contact" className="scroll-mt-24 py-20 sm:py-28">
-          <div className="relative overflow-hidden rounded-3xl border border-orange-300/20 bg-gradient-to-br from-orange-500/15 via-white/[0.04] to-transparent px-6 py-14 text-center sm:px-12 sm:py-16">
-            <div className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-px w-1/2 bg-gradient-to-r from-transparent via-orange-300/60 to-transparent" />
-            <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
-              Ready to build smarter?
-            </h2>
-            <p className="mx-auto mt-4 max-w-lg text-base leading-7 text-zinc-400">
-              Tell us about your project and we&apos;ll help you turn ideas into
-              software that moves your business forward.
+        <section id="portfolio" className="scroll-mt-24 py-20 sm:py-28">
+          <div className="mb-12 max-w-2xl">
+            <p className="mb-3 text-sm font-medium uppercase tracking-[0.25em] text-orange-300">
+              Portfolio / Demo Projects
             </p>
-            <a
-              className="mt-8 inline-flex rounded-full bg-orange-300 px-8 py-3.5 text-sm font-semibold text-black shadow-lg shadow-orange-400/20 transition hover:-translate-y-0.5 hover:bg-orange-200"
-              href="mailto:hello@goembersystems.com"
-            >
-              Start a Project
-            </a>
+            <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
+              Real systems we&apos;re building for modern businesses.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-zinc-400">
+              A sample of the kinds of products Ember Systems delivers — from
+              lead dashboards to AI-powered tools and launch-ready websites.
+            </p>
+          </div>
+
+          <div className="grid gap-5 lg:grid-cols-3">
+            {projects.map((project) => (
+              <article
+                className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] backdrop-blur transition hover:-translate-y-1 hover:border-orange-300/25"
+                key={project.title}
+              >
+                <div className="flex h-40 items-end bg-gradient-to-br from-orange-500/20 via-orange-900/20 to-black p-6">
+                  <span className="rounded-full border border-orange-300/20 bg-orange-400/10 px-3 py-1 text-xs font-medium text-orange-200">
+                    {project.category}
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col p-6">
+                  <h3 className="text-lg font-semibold text-white">
+                    {project.title}
+                  </h3>
+                  <p className="mt-3 flex-1 text-sm leading-6 text-zinc-400">
+                    {project.description}
+                  </p>
+                  <span className="mt-6 text-sm font-medium text-orange-300/80 transition group-hover:text-orange-300">
+                    Demo project →
+                  </span>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 
-        <footer className="flex flex-col items-center justify-between gap-4 border-t border-white/10 py-10 text-sm text-zinc-500 sm:flex-row">
-          <p>Ember Systems © 2026</p>
-          <a
-            className="transition hover:text-orange-300"
-            href="https://goembersystems.com"
-          >
-            goembersystems.com
-          </a>
+        <section id="contact" className="scroll-mt-24 py-20 sm:py-28">
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start">
+            <div>
+              <p className="mb-3 text-sm font-medium uppercase tracking-[0.25em] text-orange-300">
+                Contact
+              </p>
+              <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
+                Ready to build smarter?
+              </h2>
+              <p className="mt-4 max-w-md text-base leading-7 text-zinc-400">
+                Tell us what you&apos;re trying to build. Whether you need AI
+                automation, a new website, or a custom dashboard, we&apos;ll help
+                you map the right next step.
+              </p>
+
+              <div className="mt-8 space-y-3 text-sm text-zinc-500">
+                <p>
+                  <span className="text-zinc-400">Email:</span>{" "}
+                  <a
+                    className="text-orange-300 transition hover:text-orange-200"
+                    href="mailto:hello@goembersystems.com"
+                  >
+                    hello@goembersystems.com
+                  </a>
+                </p>
+                <p>
+                  <span className="text-zinc-400">Website:</span>{" "}
+                  <a
+                    className="text-orange-300 transition hover:text-orange-200"
+                    href="https://goembersystems.com"
+                  >
+                    goembersystems.com
+                  </a>
+                </p>
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur sm:p-8">
+              <ContactForm />
+            </div>
+          </div>
+        </section>
+
+        <footer className="border-t border-white/10 py-12">
+          <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-center">
+            <div>
+              <p className="text-base font-semibold text-white">Ember Systems</p>
+              <p className="mt-1 text-sm text-zinc-500">
+                AI • Automation • Software
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-2 text-sm text-zinc-500 sm:items-end">
+              <a
+                className="transition hover:text-orange-300"
+                href="https://goembersystems.com"
+              >
+                goembersystems.com
+              </a>
+              <p>© 2026 Ember Systems. All rights reserved.</p>
+            </div>
+          </div>
         </footer>
       </div>
     </main>
