@@ -1,5 +1,6 @@
 import ContactForm from "./components/ContactForm";
 import EmberLogo from "./components/EmberLogo";
+import ProjectEstimator from "./components/ProjectEstimator";
 
 export default function Home() {
   const solutions = [
@@ -124,12 +125,15 @@ export default function Home() {
             </span>
           </a>
 
-          <nav className="hidden items-center gap-7 text-sm text-zinc-400 md:flex">
+          <nav className="hidden items-center gap-6 text-sm text-zinc-400 lg:flex">
             <a className="transition hover:text-white" href="#services">
               Services
             </a>
             <a className="transition hover:text-white" href="#process">
               Process
+            </a>
+            <a className="transition hover:text-white" href="#estimator">
+              Estimate Your Project
             </a>
             <a className="transition hover:text-white" href="#contact">
               Contact
@@ -138,9 +142,9 @@ export default function Home() {
 
           <a
             className="shrink-0 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-black transition hover:bg-orange-100 sm:px-5 sm:py-3"
-            href="#contact"
+            href="#estimator"
           >
-            Start a Project
+            Get an Estimate
           </a>
         </div>
       </header>
@@ -166,9 +170,9 @@ export default function Home() {
             <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">
               <a
                 className="group rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-black shadow-lg shadow-orange-500/15 transition hover:-translate-y-0.5 hover:bg-orange-100"
-                href="#contact"
+                href="#estimator"
               >
-                Start a Project
+                Estimate Your Project
                 <span className="ml-1.5 inline-block transition group-hover:translate-x-0.5">
                   →
                 </span>
@@ -323,6 +327,23 @@ export default function Home() {
           </div>
         </section>
 
+        <section id="estimator" className="scroll-mt-24 py-20 sm:py-28">
+          <div className="mb-10 max-w-2xl">
+            <p className="mb-3 text-sm font-medium uppercase tracking-[0.25em] text-orange-300">
+              Project Estimator
+            </p>
+            <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
+              Get a quick project estimate
+            </h2>
+            <p className="mt-4 text-base leading-7 text-zinc-400">
+              Answer a few questions to see a realistic starting range for your
+              project.
+            </p>
+          </div>
+
+          <ProjectEstimator />
+        </section>
+
         <section id="contact" className="scroll-mt-24 py-20 sm:py-28">
           <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-start">
             <div>
@@ -369,7 +390,7 @@ export default function Home() {
           <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-center">
             <div>
               <a href="#" className="inline-block" aria-label="Ember Systems">
-                <EmberLogo variant="lockup" className="w-28 sm:w-32" />
+                <EmberLogo variant="lockup" />
               </a>
               <p className="mt-3 text-sm text-zinc-500">
                 AI • Automation • Software

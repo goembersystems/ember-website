@@ -62,8 +62,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/ember-logo.png",
-        width: 900,
-        height: 1200,
+        width: 977,
+        height: 814,
         alt: "Ember Systems logo",
       },
     ],
