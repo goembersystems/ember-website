@@ -1,4 +1,5 @@
 import ContactForm from "./components/ContactForm";
+import EmberLogo from "./components/EmberLogo";
 
 export default function Home() {
   const solutions = [
@@ -112,10 +113,12 @@ export default function Home() {
 
       <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-black/70 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-4 sm:px-8 lg:px-12">
-          <a href="#" className="flex items-center gap-3" aria-label="Ember Systems">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-orange-400 to-orange-700 shadow-lg shadow-orange-500/25">
-              <span className="h-2.5 w-2.5 rounded-full bg-white shadow-[0_0_18px_rgba(255,255,255,0.9)]" />
-            </span>
+          <a
+            href="#"
+            className="flex items-center gap-2.5 sm:gap-3"
+            aria-label="Ember Systems"
+          >
+            <EmberLogo priority />
             <span className="text-sm font-semibold tracking-wide text-white sm:text-base">
               Ember Systems
             </span>
@@ -365,8 +368,10 @@ export default function Home() {
         <footer className="border-t border-white/10 py-12">
           <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-center">
             <div>
-              <p className="text-base font-semibold text-white">Ember Systems</p>
-              <p className="mt-1 text-sm text-zinc-500">
+              <a href="#" className="inline-block" aria-label="Ember Systems">
+                <EmberLogo variant="lockup" className="w-28 sm:w-32" />
+              </a>
+              <p className="mt-3 text-sm text-zinc-500">
                 AI • Automation • Software
               </p>
             </div>
