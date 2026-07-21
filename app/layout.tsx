@@ -22,6 +22,15 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title,
   description,
+  icons: {
+    icon: [
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   keywords: [
     "AI automation",
     "business automation",
@@ -50,11 +59,20 @@ export const metadata: Metadata = {
     siteName: "Ember Systems",
     title,
     description,
+    images: [
+      {
+        url: "/ember-logo.png",
+        width: 900,
+        height: 1200,
+        alt: "Ember Systems logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title,
     description,
+    images: ["/ember-logo.png"],
   },
 };
 
