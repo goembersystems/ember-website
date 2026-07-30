@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import GoogleAnalyticsPlaceholder from "./components/GoogleAnalyticsPlaceholder";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,14 +15,22 @@ const geistMono = Geist_Mono({
 
 const siteUrl = "https://goembersystems.com";
 
-const title = "Ember Systems | AI Automation, Custom Software & Business Websites";
+const title =
+  "Ember Systems | Premium AI Automation, Custom Software & Business Websites";
 const description =
-  "Ember Systems builds AI automation, custom software, business websites, internal dashboards, and workflow systems that help contractors and growing businesses save time and grow faster.";
+  "Ember Systems is a premium software agency building AI automation, custom software, business websites, dashboards, and workflow systems for contractors and growing businesses.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title,
+  title: {
+    default: title,
+    template: "%s | Ember Systems",
+  },
   description,
+  applicationName: "Ember Systems",
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: [
       { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
@@ -32,25 +41,35 @@ export const metadata: Metadata = {
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
   keywords: [
-    "AI automation",
+    "premium software agency",
+    "AI automation company",
     "business automation",
     "contractor software",
-    "dashboards",
+    "custom dashboards",
     "business websites",
-    "custom software",
+    "custom software development",
     "workflow automation",
     "lead capture systems",
     "internal dashboards",
     "AI chatbots",
     "small business software",
     "Ember Systems",
+    "goembersystems",
   ],
   authors: [{ name: "Ember Systems", url: siteUrl }],
   creator: "Ember Systems",
   publisher: "Ember Systems",
+  category: "technology",
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
   openGraph: {
     type: "website",
@@ -76,6 +95,46 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${siteUrl}/#organization`,
+      name: "Ember Systems",
+      url: siteUrl,
+      logo: `${siteUrl}/ember-logo.png`,
+      email: "hello@goembersystems.com",
+      description,
+      sameAs: [siteUrl],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: "Ember Systems",
+      publisher: { "@id": `${siteUrl}/#organization` },
+      inLanguage: "en-US",
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": `${siteUrl}/#service`,
+      name: "Ember Systems",
+      url: siteUrl,
+      image: `${siteUrl}/ember-logo.png`,
+      description,
+      areaServed: "United States",
+      serviceType: [
+        "AI automation",
+        "Custom software development",
+        "Business websites",
+        "Internal dashboards",
+        "Lead capture systems",
+      ],
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -86,7 +145,14 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
     >
-      <body className="min-h-full bg-black text-white">{children}</body>
+      <body className="min-h-full bg-black text-white">
+        <script
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          type="application/ld+json"
+        />
+        <GoogleAnalyticsPlaceholder />
+        {children}
+      </body>
     </html>
   );
 }
