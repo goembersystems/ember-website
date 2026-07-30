@@ -6,7 +6,6 @@ import {
   PROJECT_TYPES,
   SCOPES,
   TIMELINES,
-  buildEstimateMailto,
   calculateEstimate,
   type FeatureId,
   type ProjectTypeId,
@@ -36,6 +35,8 @@ export default function ProjectEstimator() {
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isSending, setIsSending] = useState(false);
+  const [sendSuccess, setSendSuccess] = useState<string | null>(null);
 
   const progressStep = step === "results" ? TOTAL_STEPS : step;
   const progressPercent = (progressStep / TOTAL_STEPS) * 100;
@@ -60,6 +61,7 @@ export default function ProjectEstimator() {
 
   function goBack() {
     setError(null);
+    setSendSuccess(null);
     if (step === "results") {
       setStep(5);
       return;
@@ -71,6 +73,7 @@ export default function ProjectEstimator() {
 
   function goContinue() {
     setError(null);
+    setSendSuccess(null);
 
     if (step === 1) {
       if (!projectType) {
@@ -107,6 +110,7 @@ export default function ProjectEstimator() {
   function handleContactSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+    setSendSuccess(null);
 
     if (!name.trim() || !email.trim()) {
       setError("Name and email are required.");
@@ -121,18 +125,73 @@ export default function ProjectEstimator() {
     setStep("results");
   }
 
-  function startConversation() {
-    if (!estimate) return;
-    window.location.href = buildEstimateMailto({
-      name: name.trim(),
-      email: email.trim(),
-      company: company.trim(),
-      estimate,
-    });
+  async function startConversation() {
+    if (!estimate || isSending) return;
+
+    setError(null);
+    setSendSuccess(null);
+    setIsSending(true);
+
+    try {
+      const response = await fetch("/api/send-estimate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          company: company.trim(),
+          projectType: estimate.projectTypeLabel,
+          scope: estimate.scopeLabel,
+          selectedFeatures: estimate.featureLabels,
+          requestedTimeline: estimate.timelinePreferenceLabel,
+          estimatedPlanningTimeline: estimate.timelineLabel,
+          estimatedPriceRange: estimate.rangeLabel,
+        }),
+      });
+
+      const data = (await response.json()) as {
+        error?: string;
+        message?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ?? "Could not send your estimate. Please try again.",
+        );
+      }
+
+      setSendSuccess(
+        data.message ??
+          "Thanks — your estimate was sent. We’ll reply soon.",
+      );
+    } catch (sendError) {
+      setError(
+        sendError instanceof Error
+          ? sendError.message
+          : "Could not send your estimate. Please try again.",
+      );
+    } finally {
+      setIsSending(false);
+    }
   }
 
   function adjustAnswers() {
     setError(null);
+    setSendSuccess(null);
+    setStep(1);
+  }
+
+  function startOver() {
+    setError(null);
+    setSendSuccess(null);
+    setIsSending(false);
+    setProjectType(null);
+    setScope(null);
+    setFeatures([]);
+    setTimeline(null);
+    setName("");
+    setEmail("");
+    setCompany("");
     setStep(1);
   }
 
@@ -411,20 +470,39 @@ export default function ProjectEstimator() {
               pricing depends on project details and technical requirements.
             </p>
 
-            <div className="flex flex-col gap-3 sm:flex-row">
+            {sendSuccess && (
+              <p
+                className="mb-6 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100"
+                role="status"
+              >
+                {sendSuccess}
+              </p>
+            )}
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <button
-                className="rounded-full bg-orange-300 px-7 py-3.5 text-sm font-semibold text-black shadow-lg shadow-orange-400/20 transition hover:-translate-y-0.5 hover:bg-orange-200"
-                onClick={startConversation}
+                className="rounded-full bg-orange-300 px-7 py-3.5 text-sm font-semibold text-black shadow-lg shadow-orange-400/20 transition hover:-translate-y-0.5 hover:bg-orange-200 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+                disabled={isSending}
+                onClick={() => void startConversation()}
                 type="button"
               >
-                Start a Conversation
+                {isSending ? "Sending…" : "Start a Conversation"}
               </button>
               <button
-                className="rounded-full border border-white/12 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-white transition hover:border-orange-300/30 hover:bg-orange-400/10"
+                className="rounded-full border border-white/12 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-white transition hover:border-orange-300/30 hover:bg-orange-400/10 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={isSending}
                 onClick={adjustAnswers}
                 type="button"
               >
                 Adjust Answers
+              </button>
+              <button
+                className="rounded-full border border-white/12 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-zinc-300 transition hover:border-white/25 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={isSending}
+                onClick={startOver}
+                type="button"
+              >
+                Start Over
               </button>
             </div>
           </div>

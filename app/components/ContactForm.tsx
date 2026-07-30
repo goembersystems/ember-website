@@ -13,32 +13,58 @@ const projectTypes = [
 
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setError(null);
 
     const form = event.currentTarget;
     const data = new FormData(form);
-    const name = String(data.get("name") ?? "");
-    const email = String(data.get("email") ?? "");
-    const projectType = String(data.get("project-type") ?? "");
-    const message = String(data.get("message") ?? "");
+    const name = String(data.get("name") ?? "").trim();
+    const email = String(data.get("email") ?? "").trim();
+    const projectType = String(data.get("project-type") ?? "").trim();
+    const message = String(data.get("message") ?? "").trim();
 
-    const subject = "New Ember Systems Project Inquiry";
-    const body = [
-      "New project inquiry from the Ember Systems website:",
-      "",
-      `Name: ${name}`,
-      `Email: ${email}`,
-      `Project Type: ${projectType}`,
-      "",
-      "Message:",
-      message,
-    ].join("\n");
+    if (!name || !email || !projectType || !message) {
+      setError("Please fill in all fields before submitting.");
+      return;
+    }
 
-    const mailto = `mailto:thatonehondarider@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
-    setSubmitted(true);
+    setIsSending(true);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          projectType,
+          message,
+        }),
+      });
+
+      const result = (await response.json()) as { error?: string };
+
+      if (!response.ok) {
+        throw new Error(
+          result.error ?? "Could not send your message. Please try again.",
+        );
+      }
+
+      setSubmitted(true);
+      form.reset();
+    } catch (sendError) {
+      setError(
+        sendError instanceof Error
+          ? sendError.message
+          : "Could not send your message. Please try again.",
+      );
+    } finally {
+      setIsSending(false);
+    }
   }
 
   if (submitted) {
@@ -47,20 +73,30 @@ export default function ContactForm() {
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-orange-400/20">
           <span className="text-xl text-orange-300">✓</span>
         </div>
-        <h3 className="text-lg font-semibold text-white">Email draft ready</h3>
+        <h3 className="text-lg font-semibold text-white">Message sent</h3>
         <p className="mt-2 text-sm leading-6 text-zinc-400">
-          Your email app should open with your inquiry prefilled. Send the email
-          to complete your submission and we&apos;ll get back to you shortly.
+          Thanks for reaching out. We received your inquiry and will get back to
+          you shortly.
         </p>
+        <button
+          className="mt-6 rounded-full border border-white/12 px-5 py-2.5 text-sm font-semibold text-white transition hover:border-orange-300/30 hover:bg-orange-400/10"
+          onClick={() => {
+            setSubmitted(false);
+            setError(null);
+          }}
+          type="button"
+        >
+          Send another message
+        </button>
       </div>
     );
   }
 
   return (
     <form
-      className="space-y-5"
-      onSubmit={handleSubmit}
       aria-label="Contact form"
+      className="space-y-5"
+      onSubmit={(event) => void handleSubmit(event)}
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
@@ -72,6 +108,7 @@ export default function ContactForm() {
           </label>
           <input
             className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-zinc-600 outline-none transition focus:border-orange-300/40 focus:ring-2 focus:ring-orange-400/20"
+            disabled={isSending}
             id="name"
             name="name"
             placeholder="Your name"
@@ -89,6 +126,7 @@ export default function ContactForm() {
           </label>
           <input
             className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-zinc-600 outline-none transition focus:border-orange-300/40 focus:ring-2 focus:ring-orange-400/20"
+            disabled={isSending}
             id="email"
             name="email"
             placeholder="you@company.com"
@@ -108,6 +146,7 @@ export default function ContactForm() {
         <select
           className="w-full appearance-none rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none transition focus:border-orange-300/40 focus:ring-2 focus:ring-orange-400/20"
           defaultValue=""
+          disabled={isSending}
           id="project-type"
           name="project-type"
           required
@@ -132,6 +171,7 @@ export default function ContactForm() {
         </label>
         <textarea
           className="min-h-32 w-full resize-y rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-zinc-600 outline-none transition focus:border-orange-300/40 focus:ring-2 focus:ring-orange-400/20"
+          disabled={isSending}
           id="message"
           name="message"
           placeholder="Tell us about your project, goals, and timeline..."
@@ -139,11 +179,18 @@ export default function ContactForm() {
         />
       </div>
 
+      {error && (
+        <p className="text-sm text-orange-200" role="alert">
+          {error}
+        </p>
+      )}
+
       <button
-        className="w-full rounded-full bg-orange-300 px-8 py-3.5 text-sm font-semibold text-black shadow-lg shadow-orange-400/20 transition hover:-translate-y-0.5 hover:bg-orange-200 sm:w-auto"
+        className="w-full rounded-full bg-orange-300 px-8 py-3.5 text-sm font-semibold text-black shadow-lg shadow-orange-400/20 transition hover:-translate-y-0.5 hover:bg-orange-200 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 sm:w-auto"
+        disabled={isSending}
         type="submit"
       >
-        Submit
+        {isSending ? "Sending…" : "Submit"}
       </button>
     </form>
   );

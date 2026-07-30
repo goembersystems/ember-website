@@ -127,9 +127,20 @@ function formatMoney(amount: number): string {
   return `$${amount.toLocaleString("en-US")}`;
 }
 
-/** Round to nearest $50 so estimates feel intentional, not exact. */
-function roundEstimate(amount: number): number {
-  return Math.round(amount / 50) * 50;
+/**
+ * Round displayed estimates to intentional bands:
+ * - Under $2,000 → nearest $100
+ * - $2,000–$10,000 → nearest $500
+ * - Above $10,000 → nearest $1,000
+ */
+export function roundEstimate(amount: number): number {
+  if (amount < 2000) {
+    return Math.round(amount / 100) * 100;
+  }
+  if (amount <= 10000) {
+    return Math.round(amount / 500) * 500;
+  }
+  return Math.round(amount / 1000) * 1000;
 }
 
 function labelForProjectType(id: ProjectTypeId): string {
@@ -235,34 +246,4 @@ export function calculateEstimate(input: EstimateInput): EstimateResult {
     max: range.max,
     openEnded: range.openEnded,
   };
-}
-
-export function buildEstimateMailto(params: {
-  name: string;
-  email: string;
-  company: string;
-  estimate: EstimateResult;
-}): string {
-  const { name, email, company, estimate } = params;
-  const subject = "New Ember Systems Project Estimate";
-  const body = [
-    "New project estimate from the Ember Systems website:",
-    "",
-    `Name: ${name}`,
-    `Email: ${email}`,
-    `Company: ${company.trim() || "—"}`,
-    "",
-    `Project type: ${estimate.projectTypeLabel}`,
-    `Scope: ${estimate.scopeLabel}`,
-    `Selected features: ${
-      estimate.featureLabels.length > 0
-        ? estimate.featureLabels.join(", ")
-        : "None selected"
-    }`,
-    `Timeline preference: ${estimate.timelinePreferenceLabel}`,
-    `Estimated planning timeline: ${estimate.timelineLabel}`,
-    `Estimated starting range: ${estimate.rangeLabel}`,
-  ].join("\n");
-
-  return `mailto:thatonehondarider@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
