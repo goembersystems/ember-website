@@ -1,8 +1,10 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
-
-const ESTIMATE_TO = "thatonehondarider@gmail.com";
-const FROM = "Ember Systems <onboarding@resend.dev>";
+import {
+  LEAD_INBOX,
+  buildEstimateEmail,
+  resolveFromEmail,
+} from "../../lib/emailTemplates";
 
 type EstimatePayload = {
   name?: unknown;
@@ -72,45 +74,49 @@ export async function POST(request: Request) {
 
   if (!estimatedPlanningTimeline || !estimatedPriceRange) {
     return NextResponse.json(
-      { error: "Estimate details are incomplete. Please regenerate your estimate." },
+      {
+        error:
+          "Estimate details are incomplete. Please regenerate your estimate.",
+      },
       { status: 400 },
     );
   }
 
   const apiKey = process.env.RESEND_API_KEY?.trim();
-  if (!apiKey) {
-    console.error("RESEND_API_KEY is not configured.");
+  const from = resolveFromEmail();
+
+  if (!apiKey || !from) {
+    console.error("Missing RESEND_API_KEY and/or RESEND_FROM_EMAIL.");
     return NextResponse.json(
-      { error: "Email is not configured on the server yet. Please try again later." },
+      {
+        error:
+          "Email is not configured on the server yet. Please try again later.",
+      },
       { status: 503 },
     );
   }
 
-  const featuresLabel =
-    selectedFeatures.length > 0 ? selectedFeatures.join(", ") : "None selected";
-
-  const text = [
-    "New Ember Systems project estimate:",
-    "",
-    `Name: ${name}`,
-    `Email: ${email}`,
-    `Company: ${company || "—"}`,
-    `Project type: ${projectType}`,
-    `Scope: ${scope}`,
-    `Selected features: ${featuresLabel}`,
-    `Requested timeline: ${requestedTimeline}`,
-    `Estimated planning timeline: ${estimatedPlanningTimeline}`,
-    `Estimated price range: ${estimatedPriceRange}`,
-  ].join("\n");
+  const built = buildEstimateEmail({
+    name,
+    email,
+    company,
+    projectType,
+    scope,
+    selectedFeatures,
+    requestedTimeline,
+    estimatedPlanningTimeline,
+    estimatedPriceRange,
+  });
 
   try {
     const resend = new Resend(apiKey);
     const { error } = await resend.emails.send({
-      from: FROM,
-      to: ESTIMATE_TO,
+      from,
+      to: LEAD_INBOX,
       replyTo: email,
-      subject: "New Ember Systems Project Estimate",
-      text,
+      subject: built.subject,
+      text: built.text,
+      html: built.html,
     });
 
     if (error) {

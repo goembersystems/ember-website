@@ -1,8 +1,10 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
-
-const CONTACT_TO = "thatonehondarider@gmail.com";
-const FROM = "Ember Systems <onboarding@resend.dev>";
+import {
+  LEAD_INBOX,
+  buildContactEmail,
+  resolveFromEmail,
+} from "../../lib/emailTemplates";
 
 const ALLOWED_PROJECT_TYPES = new Set([
   "AI Automation",
@@ -70,33 +72,35 @@ export async function POST(request: Request) {
   }
 
   const apiKey = process.env.RESEND_API_KEY?.trim();
-  if (!apiKey) {
-    console.error("RESEND_API_KEY is not configured.");
+  const from = resolveFromEmail();
+
+  if (!apiKey || !from) {
+    console.error("Missing RESEND_API_KEY and/or RESEND_FROM_EMAIL.");
     return NextResponse.json(
-      { error: "Email is not configured on the server yet. Please try again later." },
+      {
+        error:
+          "Email is not configured on the server yet. Please try again later.",
+      },
       { status: 503 },
     );
   }
 
-  const text = [
-    "New project inquiry from the Ember Systems website:",
-    "",
-    `Name: ${name}`,
-    `Email: ${email}`,
-    `Project Type: ${projectType}`,
-    "",
-    "Message:",
+  const built = buildContactEmail({
+    name,
+    email,
+    projectType,
     message,
-  ].join("\n");
+  });
 
   try {
     const resend = new Resend(apiKey);
     const { error } = await resend.emails.send({
-      from: FROM,
-      to: CONTACT_TO,
+      from,
+      to: LEAD_INBOX,
       replyTo: email,
-      subject: "New Ember Systems Project Inquiry",
-      text,
+      subject: built.subject,
+      text: built.text,
+      html: built.html,
     });
 
     if (error) {

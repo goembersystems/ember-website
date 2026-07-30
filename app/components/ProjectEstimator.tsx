@@ -37,6 +37,7 @@ export default function ProjectEstimator() {
   const [error, setError] = useState<string | null>(null);
   const [isSending, setIsSending] = useState(false);
   const [sendSuccess, setSendSuccess] = useState<string | null>(null);
+  const [estimateSent, setEstimateSent] = useState(false);
 
   const progressStep = step === "results" ? TOTAL_STEPS : step;
   const progressPercent = (progressStep / TOTAL_STEPS) * 100;
@@ -51,7 +52,13 @@ export default function ProjectEstimator() {
     });
   }, [projectType, scope, features, timeline]);
 
+  function clearSentState() {
+    setEstimateSent(false);
+    setSendSuccess(null);
+  }
+
   function toggleFeature(id: FeatureId) {
+    clearSentState();
     setFeatures((current) =>
       current.includes(id)
         ? current.filter((item) => item !== id)
@@ -61,7 +68,6 @@ export default function ProjectEstimator() {
 
   function goBack() {
     setError(null);
-    setSendSuccess(null);
     if (step === "results") {
       setStep(5);
       return;
@@ -73,7 +79,6 @@ export default function ProjectEstimator() {
 
   function goContinue() {
     setError(null);
-    setSendSuccess(null);
 
     if (step === 1) {
       if (!projectType) {
@@ -110,7 +115,6 @@ export default function ProjectEstimator() {
   function handleContactSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
-    setSendSuccess(null);
 
     if (!name.trim() || !email.trim()) {
       setError("Name and email are required.");
@@ -126,7 +130,7 @@ export default function ProjectEstimator() {
   }
 
   async function startConversation() {
-    if (!estimate || isSending) return;
+    if (!estimate || isSending || estimateSent) return;
 
     setError(null);
     setSendSuccess(null);
@@ -160,6 +164,7 @@ export default function ProjectEstimator() {
         );
       }
 
+      setEstimateSent(true);
       setSendSuccess(
         data.message ??
           "Thanks — your estimate was sent. We’ll reply soon.",
@@ -177,13 +182,13 @@ export default function ProjectEstimator() {
 
   function adjustAnswers() {
     setError(null);
-    setSendSuccess(null);
+    clearSentState();
     setStep(1);
   }
 
   function startOver() {
     setError(null);
-    setSendSuccess(null);
+    clearSentState();
     setIsSending(false);
     setProjectType(null);
     setScope(null);
@@ -240,7 +245,10 @@ export default function ProjectEstimator() {
                     aria-checked={selected}
                     className={`${optionBase} ${selected ? optionActive : optionIdle}`}
                     key={option.id}
-                    onClick={() => setProjectType(option.id)}
+                    onClick={() => {
+                      clearSentState();
+                      setProjectType(option.id);
+                    }}
                     role="radio"
                     type="button"
                   >
@@ -268,7 +276,10 @@ export default function ProjectEstimator() {
                     aria-checked={selected}
                     className={`${optionBase} ${selected ? optionActive : optionIdle}`}
                     key={option.id}
-                    onClick={() => setScope(option.id)}
+                    onClick={() => {
+                      clearSentState();
+                      setScope(option.id);
+                    }}
                     role="radio"
                     type="button"
                   >
@@ -327,7 +338,10 @@ export default function ProjectEstimator() {
                     aria-checked={selected}
                     className={`${optionBase} ${selected ? optionActive : optionIdle}`}
                     key={option.id}
-                    onClick={() => setTimeline(option.id)}
+                    onClick={() => {
+                      clearSentState();
+                      setTimeline(option.id);
+                    }}
                     role="radio"
                     type="button"
                   >
@@ -362,7 +376,10 @@ export default function ProjectEstimator() {
                   className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-zinc-600 outline-none transition focus:border-orange-300/40 focus:ring-2 focus:ring-orange-400/20"
                   id={`${formId}-name`}
                   name="name"
-                  onChange={(event) => setName(event.target.value)}
+                  onChange={(event) => {
+                    clearSentState();
+                    setName(event.target.value);
+                  }}
                   placeholder="Your name"
                   required
                   type="text"
@@ -382,7 +399,10 @@ export default function ProjectEstimator() {
                   className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-zinc-600 outline-none transition focus:border-orange-300/40 focus:ring-2 focus:ring-orange-400/20"
                   id={`${formId}-email`}
                   name="email"
-                  onChange={(event) => setEmail(event.target.value)}
+                  onChange={(event) => {
+                    clearSentState();
+                    setEmail(event.target.value);
+                  }}
                   placeholder="you@company.com"
                   required
                   type="email"
@@ -403,7 +423,10 @@ export default function ProjectEstimator() {
                   className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-zinc-600 outline-none transition focus:border-orange-300/40 focus:ring-2 focus:ring-orange-400/20"
                   id={`${formId}-company`}
                   name="company"
-                  onChange={(event) => setCompany(event.target.value)}
+                  onChange={(event) => {
+                    clearSentState();
+                    setCompany(event.target.value);
+                  }}
                   placeholder="Company name"
                   type="text"
                   value={company}
@@ -482,23 +505,25 @@ export default function ProjectEstimator() {
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <button
                 className="rounded-full bg-orange-300 px-7 py-3.5 text-sm font-semibold text-black shadow-lg shadow-orange-400/20 transition hover:-translate-y-0.5 hover:bg-orange-200 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
-                disabled={isSending}
+                disabled={isSending || estimateSent}
                 onClick={() => void startConversation()}
                 type="button"
               >
-                {isSending ? "Sending…" : "Start a Conversation"}
+                {isSending
+                  ? "Sending…"
+                  : estimateSent
+                    ? "Estimate Sent"
+                    : "Start a Conversation"}
               </button>
               <button
-                className="rounded-full border border-white/12 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-white transition hover:border-orange-300/30 hover:bg-orange-400/10 disabled:cursor-not-allowed disabled:opacity-50"
-                disabled={isSending}
+                className="rounded-full border border-white/12 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-white transition hover:border-orange-300/30 hover:bg-orange-400/10"
                 onClick={adjustAnswers}
                 type="button"
               >
                 Adjust Answers
               </button>
               <button
-                className="rounded-full border border-white/12 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-zinc-300 transition hover:border-white/25 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-                disabled={isSending}
+                className="rounded-full border border-white/12 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-zinc-300 transition hover:border-white/25 hover:text-white"
                 onClick={startOver}
                 type="button"
               >
