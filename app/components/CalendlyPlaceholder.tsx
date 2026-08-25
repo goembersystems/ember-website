@@ -1,3 +1,4 @@
+import { CONTACT_SECTION_ID } from "../lib/siteConstants";
 import Reveal from "./Reveal";
 
 export default function CalendlyPlaceholder() {
@@ -13,15 +14,11 @@ export default function CalendlyPlaceholder() {
           Book a Free Consultation
         </p>
         <h3 className="mt-3 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-          Pick a time that works for you.
+          Tell us what you&apos;re building.
         </h3>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-400">
-          This is a Calendly integration placeholder. Connect your scheduling
-          link with{" "}
-          <code className="rounded bg-black/40 px-1.5 py-0.5 text-orange-200">
-            NEXT_PUBLIC_CALENDLY_URL
-          </code>{" "}
-          to embed bookings here.
+          Share your goals, timeline, and bottlenecks — we&apos;ll reply with
+          next steps and whether Ember is the right fit.
         </p>
 
         {calendlyUrl ? (
@@ -34,16 +31,17 @@ export default function CalendlyPlaceholder() {
             />
           </div>
         ) : (
-          <div className="mt-6 flex min-h-56 flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-black/40 px-6 text-center">
-            <p className="text-sm font-medium text-zinc-300">
-              Calendly embed will appear here
-            </p>
+          <div className="mt-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
             <a
-              className="mt-5 rounded-full bg-orange-300 px-6 py-3 text-sm font-semibold text-black transition hover:bg-orange-200"
-              href="#contact"
+              className="rounded-full bg-orange-300 px-6 py-3 text-sm font-semibold text-black transition hover:bg-orange-200"
+              href={`#${CONTACT_SECTION_ID}`}
             >
-              Or send a message instead
+              Send a Message
             </a>
+            <p className="text-sm text-zinc-500">
+              Include as much detail as you can — goals, timeline, and current
+              bottlenecks.
+            </p>
           </div>
         )}
       </div>

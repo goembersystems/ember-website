@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { CONTACT_SECTION_ID } from "../lib/siteConstants";
 
 export default function StickyConsultationButton() {
   const [visible, setVisible] = useState(false);
@@ -22,7 +23,7 @@ export default function StickyConsultationButton() {
           ? "pointer-events-auto translate-y-0 opacity-100"
           : "pointer-events-none translate-y-4 opacity-0"
       }`}
-      href="#consultation"
+      href={`#${CONTACT_SECTION_ID}`}
     >
       Book a Free Consultation
     </a>

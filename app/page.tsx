@@ -1,4 +1,3 @@
-import AnimatedStats from "./components/AnimatedStats";
 import CalendlyPlaceholder from "./components/CalendlyPlaceholder";
 import ContactForm from "./components/ContactForm";
 import EmberLogo from "./components/EmberLogo";
@@ -7,10 +6,11 @@ import LiveChatPlaceholder from "./components/LiveChatPlaceholder";
 import PageLoader from "./components/PageLoader";
 import ProjectEstimator from "./components/ProjectEstimator";
 import Reveal from "./components/Reveal";
+import SelectedWorkSection from "./components/SelectedWorkSection";
 import StickyConsultationButton from "./components/StickyConsultationButton";
-import TestimonialsSection from "./components/TestimonialsSection";
 import TrustBadges from "./components/TrustBadges";
 import WhyChooseSection from "./components/WhyChooseSection";
+import { CONTACT_SECTION_ID } from "./lib/siteConstants";
 
 export default function Home() {
   const solutions = [
@@ -71,51 +71,6 @@ export default function Home() {
       title: "Teams drowning in repetitive work",
       description:
         "Automate the busywork so your team can focus on clients, sales, and growth.",
-    },
-  ];
-
-  const projects = [
-    {
-      title: "Contractor Lead Dashboard",
-      category: "Dashboard",
-      result: "Faster follow-up across every inbound lead",
-      description:
-        "A centralized hub for tracking inbound leads, follow-up status, and conversion metrics.",
-    },
-    {
-      title: "AI Estimate Assistant",
-      category: "AI Automation",
-      result: "More consistent pricing in less time",
-      description:
-        "An intelligent tool that helps contractors generate faster, more consistent project estimates.",
-    },
-    {
-      title: "Website Launch System",
-      category: "Website",
-      result: "Premium brand presence that converts",
-      description:
-        "A repeatable launch framework for building and deploying high-converting business websites.",
-    },
-    {
-      title: "Service Ops Command Center",
-      category: "Internal Tools",
-      result: "One source of truth for jobs and crews",
-      description:
-        "An operations dashboard that replaces scattered texts and spreadsheets with live job visibility.",
-    },
-    {
-      title: "Lead Capture Funnel",
-      category: "Growth Systems",
-      result: "Higher-quality inquiries, fewer drop-offs",
-      description:
-        "A conversion-focused intake experience with automated routing and follow-up sequences.",
-    },
-    {
-      title: "Client Portal Prototype",
-      category: "Custom Software",
-      result: "Self-serve updates without inbox chaos",
-      description:
-        "A secure portal concept for sharing project status, documents, and next steps with clients.",
     },
   ];
 
@@ -184,7 +139,7 @@ export default function Home() {
 
           <a
             className="shrink-0 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-black transition hover:bg-orange-100 sm:px-5 sm:py-3"
-            href="#consultation"
+            href={`#${CONTACT_SECTION_ID}`}
           >
             Book a Free Consultation
           </a>
@@ -215,7 +170,7 @@ export default function Home() {
             <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">
               <a
                 className="group rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-black shadow-lg shadow-orange-500/15 transition hover:-translate-y-0.5 hover:bg-orange-100"
-                href="#consultation"
+                href={`#${CONTACT_SECTION_ID}`}
               >
                 Book a Free Consultation
                 <span className="ml-1.5 inline-block transition group-hover:translate-x-0.5">
@@ -231,8 +186,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        <AnimatedStats />
 
         <section className="scroll-mt-24 py-20 sm:py-28" id="services">
           <Reveal>
@@ -303,57 +256,7 @@ export default function Home() {
           </Reveal>
         </section>
 
-        <section className="scroll-mt-24 py-20 sm:py-28" id="portfolio">
-          <Reveal>
-            <div className="mb-12 max-w-2xl">
-              <p className="mb-3 text-sm font-medium uppercase tracking-[0.25em] text-orange-300">
-                Portfolio
-              </p>
-              <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
-                Selected systems for modern operators.
-              </h2>
-              <p className="mt-4 text-base leading-7 text-zinc-400">
-                A premium sample of the products Ember Systems designs and
-                ships — dashboards, automation, growth systems, and launch-ready
-                websites.
-              </p>
-            </div>
-          </Reveal>
-
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {projects.map((project, index) => (
-              <Reveal delayMs={(index % 3) * 80} key={project.title}>
-                <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] backdrop-blur transition duration-500 hover:-translate-y-1 hover:border-orange-300/25">
-                  <div className="relative flex h-44 items-end bg-gradient-to-br from-orange-500/25 via-orange-900/20 to-black p-6">
-                    <div className="pointer-events-none absolute inset-0 opacity-40 transition duration-700 group-hover:opacity-70">
-                      <div className="absolute -right-8 top-4 h-28 w-28 rounded-full bg-orange-300/20 blur-2xl" />
-                    </div>
-                    <span className="relative rounded-full border border-orange-300/20 bg-orange-400/10 px-3 py-1 text-xs font-medium text-orange-200">
-                      {project.category}
-                    </span>
-                  </div>
-                  <div className="flex flex-1 flex-col p-6">
-                    <h3 className="text-lg font-semibold text-white">
-                      {project.title}
-                    </h3>
-                    <p className="mt-2 text-sm font-medium text-orange-200/90">
-                      {project.result}
-                    </p>
-                    <p className="mt-3 flex-1 text-sm leading-6 text-zinc-400">
-                      {project.description}
-                    </p>
-                    <a
-                      className="mt-6 inline-flex text-sm font-medium text-orange-300/80 transition hover:text-orange-300"
-                      href="#consultation"
-                    >
-                      Ask about this →
-                    </a>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        </section>
+        <SelectedWorkSection />
 
         <section className="scroll-mt-24 py-20 sm:py-28" id="process">
           <Reveal>
@@ -392,7 +295,6 @@ export default function Home() {
         </section>
 
         <TrustBadges />
-        <TestimonialsSection />
 
         <section className="scroll-mt-24 py-20 sm:py-28" id="estimator">
           <Reveal>
