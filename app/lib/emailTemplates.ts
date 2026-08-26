@@ -2,7 +2,7 @@ const COMPANY_NAME = "Ember Systems";
 const COMPANY_SITE = "goembersystems.com";
 const COMPANY_SITE_URL = "https://goembersystems.com";
 
-export const LEAD_INBOX = "thatonehondarider@gmail.com";
+export const LEAD_INBOX = "hello@goembersystems.com";
 
 export function escapeHtml(value: string): string {
   return value
