@@ -1,16 +1,20 @@
+import { Suspense } from "react";
+import Link from "next/link";
 import CalendlyPlaceholder from "./components/CalendlyPlaceholder";
 import ContactForm from "./components/ContactForm";
 import EmberLogo from "./components/EmberLogo";
 import FaqSection from "./components/FaqSection";
+import LeadFlowHomeTeaser from "./components/LeadFlowHomeTeaser";
 import LiveChatPlaceholder from "./components/LiveChatPlaceholder";
 import PageLoader from "./components/PageLoader";
 import ProjectEstimator from "./components/ProjectEstimator";
 import Reveal from "./components/Reveal";
 import SelectedWorkSection from "./components/SelectedWorkSection";
+import SiteHeader from "./components/SiteHeader";
 import StickyConsultationButton from "./components/StickyConsultationButton";
 import TrustBadges from "./components/TrustBadges";
 import WhyChooseSection from "./components/WhyChooseSection";
-import { CONTACT_SECTION_ID } from "./lib/siteConstants";
+import { CONTACT_SECTION_ID, LEADFLOW_PATH } from "./lib/siteConstants";
 
 export default function Home() {
   const solutions = [
@@ -103,48 +107,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_40%),linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:100%_100%,64px_64px,64px_64px]" />
       </div>
 
-      <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-black/70 backdrop-blur-xl">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-4 sm:px-8 lg:px-12">
-          <a
-            aria-label="Ember Systems"
-            className="flex items-center gap-2.5 sm:gap-3"
-            href="#"
-          >
-            <EmberLogo priority />
-            <span className="text-sm font-semibold tracking-wide text-white sm:text-base">
-              Ember Systems
-            </span>
-          </a>
-
-          <nav className="hidden items-center gap-6 text-sm text-zinc-400 xl:flex">
-            <a className="transition hover:text-white" href="#services">
-              Services
-            </a>
-            <a className="transition hover:text-white" href="#portfolio">
-              Work
-            </a>
-            <a className="transition hover:text-white" href="#why-ember">
-              Why Ember
-            </a>
-            <a className="transition hover:text-white" href="#estimator">
-              Estimate
-            </a>
-            <a className="transition hover:text-white" href="#faq">
-              FAQ
-            </a>
-            <a className="transition hover:text-white" href="#consultation">
-              Consult
-            </a>
-          </nav>
-
-          <a
-            className="shrink-0 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-black transition hover:bg-orange-100 sm:px-5 sm:py-3"
-            href={`#${CONTACT_SECTION_ID}`}
-          >
-            Book a Free Consultation
-          </a>
-        </div>
-      </header>
+      <SiteHeader variant="home" />
 
       <div className="relative mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
         <section className="flex min-h-[calc(100vh-5rem)] items-center py-20 text-center sm:py-28">
@@ -222,6 +185,8 @@ export default function Home() {
             ))}
           </div>
         </section>
+
+        <LeadFlowHomeTeaser />
 
         <WhyChooseSection />
 
@@ -361,7 +326,13 @@ export default function Home() {
 
             <Reveal delayMs={120}>
               <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur sm:p-8">
-                <ContactForm />
+                <Suspense
+                  fallback={
+                    <div className="min-h-64 animate-pulse rounded-2xl bg-white/[0.04]" />
+                  }
+                >
+                  <ContactForm />
+                </Suspense>
               </div>
             </Reveal>
           </div>
@@ -370,9 +341,9 @@ export default function Home() {
         <footer className="border-t border-white/10 py-12">
           <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-center">
             <div>
-              <a aria-label="Ember Systems" className="inline-block" href="#">
+              <Link aria-label="Ember Systems" className="inline-block" href="/">
                 <EmberLogo variant="lockup" />
-              </a>
+              </Link>
               <p className="mt-3 text-sm text-zinc-500">
                 Premium software agency · AI · Automation · Custom builds
               </p>
@@ -380,6 +351,12 @@ export default function Home() {
 
             <div className="flex flex-col gap-2 text-sm text-zinc-500 sm:items-end">
               <div className="flex flex-wrap gap-4">
+                <a
+                  className="transition hover:text-orange-300"
+                  href={LEADFLOW_PATH}
+                >
+                  LeadFlow
+                </a>
                 <a className="transition hover:text-orange-300" href="#portfolio">
                   Work
                 </a>

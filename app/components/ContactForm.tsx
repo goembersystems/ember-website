@@ -1,20 +1,42 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { CONTACT_PROJECT_TYPES } from "../lib/contactProjectTypes";
+import {
+  LEADFLOW_INTEREST_QUERY,
+  LEADFLOW_PROJECT_TYPE,
+} from "../lib/siteConstants";
 
-const projectTypes = [
-  "AI Automation",
-  "Custom Website",
-  "Internal Dashboard",
-  "Custom Software",
-  "Lead Capture System",
-  "Other",
-];
+type ContactFormProps = {
+  defaultProjectType?: string;
+};
 
-export default function ContactForm() {
+export default function ContactForm({
+  defaultProjectType,
+}: ContactFormProps = {}) {
+  const searchParams = useSearchParams();
   const [submitted, setSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const initialProjectType = useMemo(() => {
+    if (
+      defaultProjectType &&
+      CONTACT_PROJECT_TYPES.includes(
+        defaultProjectType as (typeof CONTACT_PROJECT_TYPES)[number],
+      )
+    ) {
+      return defaultProjectType;
+    }
+
+    const interest = searchParams.get("interest")?.trim().toLowerCase();
+    if (interest === LEADFLOW_INTEREST_QUERY) {
+      return LEADFLOW_PROJECT_TYPE;
+    }
+
+    return "";
+  }, [defaultProjectType, searchParams]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -145,16 +167,17 @@ export default function ContactForm() {
         </label>
         <select
           className="w-full appearance-none rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none transition focus:border-orange-300/40 focus:ring-2 focus:ring-orange-400/20"
-          defaultValue=""
+          defaultValue={initialProjectType}
           disabled={isSending}
           id="project-type"
+          key={initialProjectType || "empty"}
           name="project-type"
           required
         >
           <option disabled value="">
             Select a project type
           </option>
-          {projectTypes.map((type) => (
+          {CONTACT_PROJECT_TYPES.map((type) => (
             <option key={type} value={type}>
               {type}
             </option>

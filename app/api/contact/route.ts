@@ -1,19 +1,13 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
+import { CONTACT_PROJECT_TYPE_SET } from "../../lib/contactProjectTypes";
 import {
   LEAD_INBOX,
   buildContactEmail,
   resolveFromEmail,
 } from "../../lib/emailTemplates";
 
-const ALLOWED_PROJECT_TYPES = new Set([
-  "AI Automation",
-  "Custom Website",
-  "Internal Dashboard",
-  "Custom Software",
-  "Lead Capture System",
-  "Other",
-]);
+const ALLOWED_PROJECT_TYPES = CONTACT_PROJECT_TYPE_SET;
 
 type ContactPayload = {
   name?: unknown;
